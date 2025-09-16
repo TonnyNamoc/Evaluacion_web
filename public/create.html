@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registrar | Productos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b1220;--card:#111827;--text:#e5e7eb;--muted:#a3a8b8;--border:#1f2937;
+      --primary:#3b82f6;--ok:#10b981;--error:#ef4444;--shadow:0 4px 18px rgba(0,0,0,.35);
+      /* 👉 separacion superior del recuadro respecto al header */
+      --offset-top: 88px;
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0}
+    body{
+      font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);color:var(--text);
+      /* estructura header | main | footer */
+      min-height:100dvh;
+      display:grid;grid-template-rows:auto 1fr auto;
+    }
+
+    /* Topbar */
+    .topbar{
+      position:sticky;top:0;z-index:10;background:var(--card);
+      border-bottom:1px solid var(--border);box-shadow:var(--shadow);
+      display:flex;align-items:center;justify-content:space-between;padding:10px 16px
+    }
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    .brand-dot{width:10px;height:10px;border-radius:999px;background:var(--primary)}
+    .nav{display:flex;gap:8px}
+    .nav-link{padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--text);border:1px solid transparent}
+    .nav-link:hover{background:#0e1a33;border-color:#1e3a8a}
+    .nav-link.active{background:var(--primary);color:#0b1220}
+
+    /* Contenedor principal centrado horizontal y empujado hacia abajo */
+    .container{max-width:900px;margin:0 auto;padding:0 16px}
+    .main-offset{
+      display:grid;
+      place-content:start center;   /* start = arriba; center = horizontal centrado */
+      padding: var(--offset-top) 16px 32px;  /* 👉 aquí controlamos qué tan abajo queda */
+    }
+
+    /* Card / formulario */
+    .card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow);
+      max-width:760px;width:100%;
+    }
+    .card-title{font-weight:700;margin-bottom:10px}
+    .muted{color:var(--muted)} .ok{color:var(--ok)} .error{color:var(--error)}
+
+    .input{
+      color:var(--text);background:#0f172a;border:1px solid var(--border);
+      border-radius:10px;padding:10px;font-size:14px;width:100%
+    }
+    .input::placeholder{color:#7c869b}
+    .btn{background:var(--primary);color:#0b1220;border:none;border-radius:10px;padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.secondary{background:#334155;color:#e5e7eb}
+
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .form-actions{display:flex;gap:8px;margin-top:6px}
+
+    /* Responsivo */
+    @media (max-width:900px){
+      .form-grid{grid-template-columns:1fr}
+      :root{ --offset-top: 64px; } /* un poco menos en pantallas pequeñas */
+    }
+    /* Si la pantalla es muy baja, reduce la separación para que no se salga */
+    @media (max-height:680px){
+      :root{ --offset-top: 56px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-dot"></div><span>Panel de Productos</span></div>
+    <nav class="nav">
+      <a class="nav-link" href="./index.html">Dashboard</a>
+      <a class="nav-link active" href="./create.html">Registrar</a>
+    </nav>
+  </header>
+
+  <!-- 👇 aplicamos main-offset para centrar y separar del header -->
+  <main class="container main-offset">
+    <section class="card">
+      <div class="card-title" id="form-title">Registrar producto</div>
+
+      <form id="form" class="form-grid">
+        <label>Nombre
+          <input id="nombre" class="input" required minlength="2" />
+        </label>
+        <label>Descripción
+          <input id="descripcion" class="input" required minlength="5" />
+        </label>
+        <label>Precio
+          <input id="precio" class="input" type="number" step="0.01" min="0" required />
+        </label>
+        <label>Stock
+          <input id="stock" class="input" type="number" step="1" min="0" required />
+        </label>
+        <label>Categoría
+          <select id="categoria" class="input" required>
+            <option value="">— Selecciona —</option>
+            <option>Electrónica</option>
+            <option>Ropa</option>
+            <option>Alimentos</option>
+          </select>
+        </label>
+
+        <div class="form-actions">
+          <button class="btn" type="submit">Guardar</button>
+          <a class="btn secondary" href="./index.html">Volver al dashboard</a>
+        </div>
+
+        <p id="msg-ok" class="ok"></p>
+        <p id="msg-error" class="error"></p>
+      </form>
+    </section>
+  </main>
+
+
+  <!-- Config API base -->
+  <script>
+    (function () {
+      window.API_BASE = location.origin.includes('localhost:3000') ? '/api' : 'http://localhost:3000/api';
+    })();
+  </script>
+  <script src="./form.js"></script>
+</body>
+</html>

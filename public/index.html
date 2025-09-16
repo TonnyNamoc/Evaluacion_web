@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard | Productos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Bootstrap Icons (solo íconos, SIN Bootstrap CSS) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b1220; --card:#111827; --text:#e5e7eb; --muted:#a3a8b8; --border:#1f2937;
+      --primary:#3b82f6; --ok:#10b981; --error:#ef4444; --shadow:0 4px 18px rgba(0,0,0,.35);
+      --thead:#0f172a; --track:#1e293b;
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0}
+    body{font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+
+    /* Topbar */
+    .topbar{
+      position:sticky;top:0;z-index:10;background:var(--card);
+      border-bottom:1px solid var(--border);box-shadow:var(--shadow);
+      display:flex;align-items:center;justify-content:space-between;padding:10px 16px
+    }
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    .brand-dot{width:10px;height:10px;border-radius:999px;background:var(--primary)}
+    .nav{display:flex;gap:8px}
+    .nav-link{padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--text);border:1px solid transparent}
+    .nav-link:hover{background:#0e1a33;border-color:#1e3a8a}
+    .nav-link.active{background:var(--primary);color:#0b1220}
+
+    /* Layout */
+    .container{max-width:1100px;margin:18px auto;padding:0 16px}
+    .card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow)
+    }
+    .card-title{font-weight:700;margin-bottom:10px}
+    .card-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .muted{color:var(--muted)} .ok{color:var(--ok)} .error{color:var(--error)}
+
+    /* Hero */
+    .hero{display:flex;align-items:center;justify-content:space-between;gap:10px;
+      background:linear-gradient(90deg,#0e1a33,#111827)}
+    .hero h1{margin:0}
+
+    /* Inputs / botones */
+    .input{
+      color:var(--text);background:#0f172a;border:1px solid var(--border);
+      border-radius:10px;padding:10px;font-size:14px;width:100%
+    }
+    .input::placeholder{color:#7c869b}
+    .btn{background:var(--primary);color:#0b1220;border:none;border-radius:10px;padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.secondary{background:#334155;color:#e5e7eb}
+
+    /* Icon buttons para acciones */
+    .table-actions{display:flex;gap:6px;flex-wrap:wrap}
+    .icon-btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:36px;height:36px;border-radius:10px;border:1px solid var(--border);
+      background:#0f172a;color:#d1d5db;cursor:pointer;transition:transform .07s ease, background .15s ease, border-color .15s ease;
+    }
+    .icon-btn:hover{background:#12203a;border-color:#264579;color:#fff}
+    .icon-btn:active{transform:translateY(1px)}
+    .icon-btn.danger{color:#fecaca;border-color:#3b1e1e;background:#141218}
+    .icon-btn.danger:hover{background:#2a1212;border-color:#7f1d1d;color:#fff}
+
+    /* Tabla */
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse}
+    thead th{background:var(--thead);border-bottom:2px solid var(--border);text-align:left;padding:10px;color:#d1d5db}
+    tbody td{border-bottom:1px solid var(--border);padding:10px;vertical-align:top}
+
+    /* Dashboard específico */
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:14px}
+    .kpi .kpi-title{color:var(--muted);font-size:12px}
+    .kpi .kpi-value{font-size:28px;font-weight:800;margin:4px 0}
+    .kpi .kpi-sub{font-size:12px}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+    .bars{display:flex;flex-direction:column;gap:10px}
+    .bar{display:flex;align-items:center;gap:10px}
+    .bar-label{width:120px;color:var(--muted);font-size:14px}
+    .bar-track{flex:1;background:var(--track);border-radius:999px;overflow:hidden;height:12px}
+    .bar-fill{height:100%;background:var(--primary)}
+
+    .sparkline{height:120px;display:flex;align-items:center;justify-content:center}
+    .sparkline svg{width:100%;height:100%}
+
+    .footer{text-align:center;color:var(--muted);padding:16px}
+
+    @media (max-width:900px){
+      .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid-2{grid-template-columns:1fr}
+      .card-title-row{flex-direction:column;align-items:flex-start;gap:8px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-dot"></div><span>Panel de Productos</span></div>
+    <nav class="nav">
+      <a class="nav-link active" href="./index.html">Dashboard</a>
+      <a class="nav-link" href="./create.html">Registrar</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero card">
+      <div><h1>¡Buen día!</h1><p class="muted">Resumen de tu inventario y actividad reciente.</p></div>
+      <div><a class="btn" href="./create.html">+ Nuevo producto</a></div>
+    </section>
+
+    <section class="kpi-grid">
+      <article class="card kpi"><div class="kpi-title">Productos</div><div class="kpi-value" id="kpi-total">—</div><div class="kpi-sub muted" id="kpi-nuevos">— nuevos hoy</div></article>
+      <article class="card kpi"><div class="kpi-title">Stock total</div><div class="kpi-value" id="kpi-stock">—</div><div class="kpi-sub muted" id="kpi-bajo">— con stock bajo</div></article>
+      <article class="card kpi"><div class="kpi-title">Precio promedio</div><div class="kpi-value" id="kpi-promedio">—</div><div class="kpi-sub muted" id="kpi-max">máx —</div></article>
+      <article class="card kpi"><div class="kpi-title">Categorías</div><div class="kpi-value" id="kpi-cats">—</div><div class="kpi-sub muted" id="kpi-topcat">— principal</div></article>
+    </section>
+
+    <section class="grid-2">
+      <article class="card"><div class="card-title">Distribución por categoría</div><div id="cat-bars" class="bars"></div></article>
+      <article class="card"><div class="card-title">Tendencia precios (últimos N)</div><div id="sparkline" class="sparkline"></div></article>
+    </section>
+
+    <section class="card">
+      <div class="card-title-row">
+        <div class="card-title">Listado de productos</div>
+        <input id="filtro" class="input" placeholder="Buscar por nombre o categ." />
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th><th>Categoría</th><th>Creado</th><th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <p id="tabla-msg" class="muted"></p>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- Config API base -->
+  <script>
+    (function () {
+      window.API_BASE = location.origin.includes('localhost:3000') ? '/api' : 'http://localhost:3000/api';
+    })();
+  </script>
+  <script src="./dashboard.js"></script>
+</body>
+</html>
