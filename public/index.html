@@ -144,12 +144,11 @@
   </main>
 
 
-  <!-- Config API base -->
-  <script>
-    (function () {
-      window.API_BASE = location.origin.includes('localhost:3000') ? '/api' : 'http://localhost:3000/api';
-    })();
-  </script>
+ <!-- Config API base (mismo origen en local y en Render) -->
+<script>
+  window.API_BASE = '/api';
+</script>
+
   <script src="./dashboard.js"></script>
 </body>
 </html>
